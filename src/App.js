@@ -172,7 +172,7 @@ class  App extends React.Component {
         return (
         <div className="App"> 
             <div className="card">
-          <table> 
+          <table className="card-grid"> 
           <tbody>
             { this.state.numbers.map((row, i) => {
             return(
@@ -192,6 +192,9 @@ class  App extends React.Component {
             })}
             </tbody>
         </table>
+            <div className={`overlay-message ${this.state.message && 'is-visible'}`}>
+                <h2>{this.state.message}</h2>
+            </div>
         </div> 
         <p >{this.state.message}</p>
         <div className="score">

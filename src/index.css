@@ -19,12 +19,35 @@ text-align: left;
 
 
 .card{
-  height: 100%;
+  position: relative;
+  /* height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   
+}
+
+.overlay-message {
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  opacity: 0;
+  text-align: center;
+  padding-top: 6em;
+}
+
+.overlay-message.is-visible {
+  opacity: 1;
+}
+
+.card-grid {
+  margin: 0 auto;
 }
 
 
