@@ -49,14 +49,14 @@ export default class Num extends React.Component{
         else {
             cardToShow = cardelse;
         }
-        return <img width="110" src={cardToShow} />;
+        return <img width="110" src={cardToShow} alt='active_card'/>;
     }
     
     
     render(){
         return(
         <td onClick={this.clickHandler}>
-            {(this.props.isVisible === true) ? this.showCard(this.props.number) : <img width="110" src={flippedcard} />}
+            {(this.props.isVisible === true) ? this.showCard(this.props.number) : <img width="110" src={flippedcard} alt='card'/>}
             </td> 
         ); 
         

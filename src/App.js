@@ -1,6 +1,14 @@
 import React from 'react';
 import Num from './Num.js'; 
 import './App.css';
+import WrongAudio from './assets/Wrong-ans.mp3';
+import CorrectAudio from './assets/ding.mp3';
+//import GameAudio from '#';
+import WinAudio from './assets/win.mp3';
+import GameOverAudio from './assets/GameOver.mp3';
+
+
+
 
 function randomTo(max) { 
     return Math.floor(Math.random() * max);
@@ -26,18 +34,25 @@ function generateNumbers() {
 
 
 class  App extends React.Component {
-    state = {
-        previousNumber: null,
-        visibleNums: [],
-        canPlay: true,
-        message: '',
-        score:0,
-        numbers: generateNumbers(),
-        chances: 5, 
-        isPreviewing: true, 
-        preview: 2, 
-    
-    }; 
+    constructor(props){
+        super(props);
+        this.state = {
+            previousNumber: null,
+            visibleNums: [],
+            canPlay: true,
+            message: '',
+            score:0,
+            numbers: generateNumbers(),
+            chances: 5, 
+            isPreviewing: true, 
+            preview: 2, 
+
+        }
+        this.wrongAudio = new Audio(WrongAudio);
+        this.correctAudio = new Audio(CorrectAudio); 
+        this.gameoverAudio = new Audio(GameOverAudio);
+        this.winAudio = new Audio(WinAudio); 
+    } 
 
     componentDidMount() {
         this.reset();
@@ -101,14 +116,14 @@ class  App extends React.Component {
                 })
             } else { 
                 if (number === this.state.previousNumber) {
-                    
+                    this.correctAudio.play();
                     this.setState({
                         previousNumber: null,
                         message: "Correct ^^", 
                         score: this.state.score +1, 
                     }, () => {
-                        if (this.state.score==9){
-
+                        if (this.state.score === 9){
+                            this.winAudio.play(); 
                             this.setState({
                                 canPlay: false,
                                 message:"You Win ^_^",
@@ -117,12 +132,14 @@ class  App extends React.Component {
                     }
                     });
                 }else {
+                    this.wrongAudio.play();
                     this.setState({
                         message: "WRONG!",
                         canPlay: false, 
                         chances: this.state.chances-1
                     }, () => {
-                        if (this.state.chances  == 0 ){
+                        if (this.state.chances  === 0 ){
+                            this.gameoverAudio.play();
                             this.setState({
 //                                previousNumber: null,
 //                                visibleNums: oldVisibleNums,
@@ -134,7 +151,8 @@ class  App extends React.Component {
                             setTimeout(() => {
                                 oldVisibleNums.pop();
                                 oldVisibleNums.pop();
-
+                                
+                                 
                                 this.setState({
                                     previousNumber: null,
                                     visibleNums: oldVisibleNums,
@@ -155,12 +173,13 @@ class  App extends React.Component {
         <div className="App"> 
             <div className="card">
           <table> 
-          { this.state.numbers.map((row, i) => {
+          <tbody>
+            { this.state.numbers.map((row, i) => {
             return(
-              <tr> 
+              <tr key={row}> 
                { row.map((number, j)=> {
                 return (
-                 <Num number={number} 
+                 <Num key={Math.random()} number={number} 
                   isVisible={this.state.isPreviewing || this.state.visibleNums.includes(`${i}-${j}`)} 
                   onSelect={() => this.onSelectHandler(i, j, number)}/> 
 
@@ -171,17 +190,18 @@ class  App extends React.Component {
             ); 
 
             })}
-            </table>
-            </div> 
-            <p >{this.state.message}</p>
-            <div className="score">
-                <p id="score"> Score: {this.state.score}</p>
-                <p id ="chnces"> Chances: {this.state.chances}</p>
-                <p id ="preview"> Hint: {this.state.preview}</p> 
-            </div> 
-            <button id="reset" onClick={this.reset}> Reset </button> 
-            <button disabled={this.state.preview === 0} disabled = {this.state.score==9} id="hint" onClick={this.preview}>Hint</button>
-          </div>
+            </tbody>
+        </table>
+        </div> 
+        <p >{this.state.message}</p>
+        <div className="score">
+            <p id="score"> Score: {this.state.score}</p>
+            <p id ="chnces"> Chances: {this.state.chances}</p>
+            <p id ="preview"> Hint: {this.state.preview}</p> 
+        </div> 
+        <button id="reset" onClick={this.reset}> Reset </button> 
+        <button disabled={this.state.preview === 0 || this.state.score === 9} id="hint" onClick={this.preview}>Hint</button>
+      </div>
          ); 
          }
     }
