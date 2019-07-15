@@ -41,6 +41,7 @@ class  App extends React.Component {
             visibleNums: [],
             canPlay: true,
             message: '',
+            ansMessage: '', 
             score:0,
             numbers: generateNumbers(),
             chances: 5, 
@@ -83,6 +84,7 @@ class  App extends React.Component {
             visibleNums: [],
             canPlay: false,
             message: '',
+            ansMessage: '', 
             score:0,
             numbers: generateNumbers(),
             chances: 5, 
@@ -119,7 +121,7 @@ class  App extends React.Component {
                     this.correctAudio.play();
                     this.setState({
                         previousNumber: null,
-                        message: "Correct ^^", 
+                        ansMessage: "Correct ^^", 
                         score: this.state.score +1, 
                     }, () => {
                         if (this.state.score === 9){
@@ -134,7 +136,7 @@ class  App extends React.Component {
                 }else {
                     this.wrongAudio.play();
                     this.setState({
-                        message: "WRONG!",
+                        ansMessage: "WRONG!",
                         canPlay: false, 
                         chances: this.state.chances-1
                     }, () => {
@@ -196,7 +198,8 @@ class  App extends React.Component {
                 <h2>{this.state.message}</h2>
             </div>
         </div> 
-        <p >{this.state.message}</p>
+        <p id="ansMessage">{this.state.ansMessage} </p>  
+
         <div className="score">
             <p id="score"> Score: {this.state.score}</p>
             <p id ="chnces"> Chances: {this.state.chances}</p>
